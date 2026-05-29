@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVIKAS Logistics Dashboard</title>
+  <meta name="description" content="MVIKAS Logistics Dashboard - Shipment classification, tonnage progress, and daily averages by client.">
+  
+  <!-- Modern Typography (Inter Font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Link to Separated CSS -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Chart.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</head>
+<body>
+
+  <!-- Top Header Banner -->
+  <header class="dash-header">
+    <div class="header-container">
+      <img src="logo.png" alt="MVIKAS - India's First 5PL Company Logo" class="brand-logo">
+      <div class="header-info">
+        <span class="badge-date">As of May 29, 2026</span>
+        <span class="badge-elapsed">29 / 31 days elapsed · May 2026</span>
+      </div>
+    </div>
+  </header>
+
+  <h2 class="sr-only">MVIKAS Logistics Dashboard — shipment classification, tonnage progress, and daily averages by client</h2>
+
+  <div class="dash">
+
+    <section class="metric-grid" aria-label="Key Performance Indicators">
+      <div class="metric">
+        <div class="metric-label">Total open shipments</div>
+        <div class="metric-val">489</div>
+        <div class="metric-sub">Active in pipeline</div>
+      </div>
+      <div class="metric danger">
+        <div class="metric-label">EDD crossed (delayed)</div>
+        <div class="metric-val">188</div>
+        <div class="metric-sub">38.4% of open</div>
+      </div>
+      <div class="metric warning">
+        <div class="metric-label">Due tomorrow</div>
+        <div class="metric-val">63</div>
+        <div class="metric-sub">At risk if not dispatched</div>
+      </div>
+      <div class="metric success">
+        <div class="metric-label">Booked yesterday</div>
+        <div class="metric-val">107</div>
+        <div class="metric-sub">May 28, 2026</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Daily tonnage (today)</div>
+        <div class="metric-val">27,923 <span style="font-size:0.9rem;font-weight:600">kg</span></div>
+        <div class="metric-sub">Across all clients</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Month tonnage to date</div>
+        <div class="metric-val">4,13,408 <span style="font-size:0.9rem;font-weight:600">kg</span></div>
+        <div class="metric-sub">May 2026 cumulative</div>
+      </div>
+    </section>
+
+    <div class="tab-bar" role="tablist">
+      <button class="tab active" role="tab" id="tab-btn-classify" aria-selected="true" aria-controls="tab-classify" onclick="switchTab('classify', this)">Shipment Classification</button>
+      <button class="tab" role="tab" id="tab-btn-tonnage" aria-selected="false" aria-controls="tab-tonnage" onclick="switchTab('tonnage', this)">Tonnage % by Client</button>
+      <button class="tab" role="tab" id="tab-btn-daily" aria-selected="false" aria-controls="tab-daily" onclick="switchTab('daily', this)">Daily Avg & Completion</button>
+    </div>
+
+    <!-- Panel 1: Shipment Classification -->
+    <div id="tab-classify" class="panel active" role="tabpanel" aria-labelledby="tab-btn-classify">
+      <div class="row2">
+        <div class="card">
+          <div class="section-title">Shipment status breakdown</div>
+          <div class="legend">
+            <span><span class="legend-dot" style="background:#ef4444"></span>Delayed (EDD crossed) — 188</span>
+            <span><span class="legend-dot" style="background:#3b82f6"></span>Open (in transit) — 301</span>
+            <span><span class="legend-dot" style="background:#f59e0b"></span>Due tomorrow — 63</span>
+            <span><span class="legend-dot" style="background:#10b981"></span>Booked yesterday — 107</span>
+          </div>
+          <div class="chart-wrap" style="height:260px">
+            <canvas id="statusDonut" role="img" aria-label="Donut chart: 188 delayed, 301 open, 63 due tomorrow, 107 booked yesterday">Shipment status: 188 delayed, 301 open in transit, 63 due tomorrow, 107 booked yesterday.</canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title">Top customers — delayed shipments</div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>Customer</th><th>Delayed</th><th>Open</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Bombax</strong></td><td>80</td><td>227</td><td><span class="badge delayed">Critical</span></td></tr>
+                <tr><td><strong>Sukuga</strong></td><td>34</td><td>51</td><td><span class="badge delayed">High</span></td></tr>
+                <tr><td><strong>Carrier Refrigeration</strong></td><td>25</td><td>118</td><td><span class="badge open">Medium</span></td></tr>
+                <tr><td><strong>Kumar Services</strong></td><td>12</td><td>13</td><td><span class="badge delayed">High</span></td></tr>
+                <tr><td><strong>Haier CCR</strong></td><td>8</td><td>28</td><td><span class="badge open">Medium</span></td></tr>
+                <tr><td><strong>Carrier - CTD</strong></td><td>7</td><td>11</td><td><span class="badge open">Medium</span></td></tr>
+                <tr><td><strong>Vaidrishi Labs</strong></td><td>5</td><td>6</td><td><span class="badge warning">Watch</span></td></tr>
+                <tr><td><strong>Loom Solar</strong></td><td>4</td><td>5</td><td><span class="badge warning">Watch</span></td></tr>
+                <tr><td><strong>Cosmos Pumps</strong></td><td>3</td><td>8</td><td><span class="badge due">Low</span></td></tr>
+                <tr><td><strong>SCJ</strong></td><td>3</td><td>3</td><td><span class="badge due">Low</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">Due-tomorrow orders by customer (top 8)</div>
+        <div class="legend">
+          <span><span class="legend-dot" style="background:#004df5"></span>Orders due May 30</span>
+        </div>
+        <div class="chart-wrap" style="height:280px">
+          <canvas id="dueTmrChart" role="img" aria-label="Bar chart showing orders due tomorrow per customer">Orders due tomorrow by customer.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Tonnage Progress -->
+    <div id="tab-tonnage" class="panel" role="tabpanel" aria-labelledby="tab-btn-tonnage">
+      <div class="card prog-section">
+        <div class="section-title">Tonnage achieved vs monthly target — % completion</div>
+        <div id="tonnage-bars"></div>
+      </div>
+      <div class="row2">
+        <div class="card">
+          <div class="section-title">Monthly target distribution</div>
+          <div class="legend">
+            <span><span class="legend-dot" style="background:#004df5"></span>Target (kg)</span>
+          </div>
+          <div class="chart-wrap" style="height:340px">
+            <canvas id="targetChart" role="img" aria-label="Horizontal bar chart of monthly tonnage targets per client">Monthly tonnage targets per client.</canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title">Achieved vs target comparison</div>
+          <div class="legend">
+            <span><span class="legend-dot" style="background:#10b981"></span>Achieved</span>
+            <span><span class="legend-dot" style="background:#475569"></span>Target</span>
+          </div>
+          <div class="chart-wrap" style="height:340px">
+            <canvas id="achChart" role="img" aria-label="Grouped bar chart comparing achieved tonnage vs target per client">Achieved vs target per client.</canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 3: Daily Avg & Completion -->
+    <div id="tab-daily" class="panel" role="tabpanel" aria-labelledby="tab-btn-daily">
+      <div class="section-title">Per-client daily average & days to complete remaining target</div>
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Monthly Target (kg)</th>
+                <th>Achieved (kg)</th>
+                <th>% Done</th>
+                <th>Avg kg/active day</th>
+                <th>Remaining (kg)</th>
+                <th>Days to finish*</th>
+              </tr>
+            </thead>
+            <tbody id="daily-table-body"></tbody>
+          </table>
+        </div>
+        <p class="footnote">* Based on current avg kg/active day. Remaining days in May: 3 (29–31)</p>
+      </div>
+      <div class="row2">
+        <div class="card">
+          <div class="section-title">Avg kg dispatched per active day (top clients)</div>
+          <div class="legend">
+            <span><span class="legend-dot" style="background:#6366f1"></span>Avg kg/day</span>
+          </div>
+          <div class="chart-wrap" style="height:320px">
+            <canvas id="avgDayChart" role="img" aria-label="Bar chart of average kg per active day per client">Average kg per active day per client.</canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title">Days needed to complete remaining target</div>
+          <div class="legend">
+            <span><span class="legend-dot" style="background:#ef4444"></span>&gt;10 days needed</span>
+            <span><span class="legend-dot" style="background:#f59e0b"></span>4–10 days</span>
+            <span><span class="legend-dot" style="background:#10b981"></span>≤3 days / done</span>
+          </div>
+          <div class="chart-wrap" style="height:320px">
+            <canvas id="daysChart" role="img" aria-label="Bar chart of estimated days to complete remaining tonnage target per client">Days needed to complete target per client.</canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Link to Separated JS -->
+  <script src="script.js"></script>
+</body>
+</html>
